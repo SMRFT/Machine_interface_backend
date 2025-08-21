@@ -1,8 +1,7 @@
 from django.db import models
 
 # Create your models here.
-class DeviceData(models.Model):
-    
+class Testvalue(models.Model):
     DeviceID = models.CharField(max_length=20)
     lab_unique_id=models.CharField(max_length=25)
     Barcode = models.CharField(max_length=10)
