@@ -6,7 +6,7 @@ from django.utils import timezone
 class Testvalue(models.Model):
     DeviceID = models.CharField(max_length=20)
     lab_unique_id = models.CharField(max_length=25)
-    Barcode = models.CharField(max_length=10)
+    Barcode = models.CharField(max_length=30)
     TestCode = models.CharField(max_length=10)
     Value = models.CharField(max_length=255)
     RawData = models.TextField(null=True, blank=True)
