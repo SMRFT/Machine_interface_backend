@@ -46,7 +46,7 @@ import os
 # =========================================
 # MongoDB Connection
 # =========================================
-client =  MongoClient(os.getenv("LAB_DB_HOST"))
+client =  MongoClient(os.getenv("GLOBAL_DB_HOST"))
 
 db = client["Diagnostics"]
 
