@@ -28,3 +28,21 @@ class Testvalue(models.Model):
 
     def __str__(self):
         return f"{self.DeviceID} - {self.TestCode}"
+    
+
+
+
+
+
+
+class Bidirectional(models.Model):
+    
+    DeviceID = models.CharField(max_length=20)
+    lab_unique_id=models.CharField(max_length=25)
+    Barcode = models.CharField(max_length=10)
+    TestCode = models.CharField(max_length=10)
+    CreatedDate = models.DateTimeField()#find the meaning of the date
+    Receiveddate= models.DateTimeField(auto_now=True)#default to currentdate
+   
+    def __str__(self):
+        return f"{self.DeviceID} - {self.TestCode}"

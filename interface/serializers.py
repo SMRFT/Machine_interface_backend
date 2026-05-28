@@ -12,5 +12,14 @@ from .models import Testvalue
 class DeviceDataSerializer(serializers.ModelSerializer):
     id = ObjectIdField(read_only=True)
     class Meta:
-        model = Testvalue
+        model = DeviceData
+        fields = '__all__'
+
+
+
+from .models import Bidirectional
+class BidirectionalSerializer(serializers.ModelSerializer):
+    id = ObjectIdField(read_only=True)
+    class Meta:
+        model = Bidirectional
         fields = '__all__'
