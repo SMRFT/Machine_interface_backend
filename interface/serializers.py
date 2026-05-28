@@ -12,7 +12,7 @@ from .models import Testvalue
 class DeviceDataSerializer(serializers.ModelSerializer):
     id = ObjectIdField(read_only=True)
     class Meta:
-        model = DeviceData
+        model = Testvalue
         fields = '__all__'
 
 
