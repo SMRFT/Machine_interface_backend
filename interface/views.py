@@ -39,14 +39,13 @@ from rest_framework import status
 from pymongo import MongoClient
 from datetime import datetime
 import json
-from pymongo import MongoClient
 import os
 
 
 # =========================================
 # MongoDB Connection
 # =========================================
-client =  MongoClient(os.getenv("LAB_DB_HOST"))
+client = MongoClient(os.getenv("LAB_DB_HOST"))
 
 db = client["Diagnostics"]
 
@@ -70,6 +69,11 @@ def get_testcode_by_barcode(request):
         data = request.data
 
         barcode = data.get("barcode")
+
+        # =========================================
+        # NEW: OPTIONAL DEVICE ID
+        # =========================================
+        device_Id = data.get("device_Id")
 
         # =========================================
         # VALIDATION
@@ -154,18 +158,6 @@ def get_testcode_by_barcode(request):
 
                         results.append(result_data)
 
-                        # =========================================
-                        # SAVE LOG
-                        # =========================================
-                        sent_barcode_logs.insert_one({
-                            "barcode": barcode,
-                            "patient_name": patient_name,
-                            "test_id": test_id,
-                            "device_id": device,
-                            "test_code": param.get("test_code"),
-                            "created_date": datetime.utcnow()
-                        })
-
             # =========================================
             # CASE 2
             # PARAMETERIZED TEST → SINGLE DEVICE
@@ -188,18 +180,6 @@ def get_testcode_by_barcode(request):
 
                     results.append(result_data)
 
-                    # =========================================
-                    # SAVE LOG
-                    # =========================================
-                    sent_barcode_logs.insert_one({
-                        "barcode": barcode,
-                        "patient_name": patient_name,
-                        "test_id": test_id,
-                        "device_id": default_device,
-                        "test_code": param.get("test_code"),
-                        "created_date": datetime.utcnow()
-                    })
-
             # =========================================
             # CASE 3
             # SINGLE TEST → SINGLE/MULTIPLE DEVICE
@@ -217,17 +197,42 @@ def get_testcode_by_barcode(request):
 
                     results.append(result_data)
 
-                    # =========================================
-                    # SAVE LOG
-                    # =========================================
-                    sent_barcode_logs.insert_one({
-                        "barcode": barcode,
-                        "patient_name": patient_name,
-                        "test_id": test_id,
-                        "device_id": device,
-                        "test_code": main_test_code,
-                        "created_date": datetime.utcnow()
-                    })
+            # =========================================
+            # NEW: DEVICE ID FILTER
+            # =========================================
+            # If device_Id is provided,
+            # return only matching device results.
+            #
+            # If device_Id is not provided,
+            # existing behavior remains unchanged.
+            # =========================================
+
+            if device_Id:
+
+                results = [
+                    result for result in results
+                    if result.get("device_id") == device_Id
+                ]
+
+                final_device_ids = [
+                    device
+                    for device in final_device_ids
+                    if device == device_Id
+                ]
+
+            # =========================================
+            # SAVE LOG ONLY FOR RETURNED RESULTS
+            # =========================================
+            for result in results:
+
+                sent_barcode_logs.insert_one({
+                    "barcode": barcode,
+                    "patient_name": patient_name,
+                    "test_id": test_id,
+                    "device_id": result.get("device_id"),
+                    "test_code": result.get("test_code"),
+                    "created_date": datetime.utcnow()
+                })
 
             # =========================================
             # FINAL RESPONSE
