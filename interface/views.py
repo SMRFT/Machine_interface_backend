@@ -73,7 +73,7 @@ def get_testcode_by_barcode(request):
         # =========================================
         # NEW: OPTIONAL DEVICE ID
         # =========================================
-        device_Id = data.get("device_Id")
+        device_Id = data.get("device_Id") or data.get("device_id")
 
         # =========================================
         # VALIDATION
@@ -211,14 +211,18 @@ def get_testcode_by_barcode(request):
 
                 results = [
                     result for result in results
-                    if result.get("device_id") == device_Id
+                    if str(result.get("device_id", "")).strip().upper() == str(device_Id).strip().upper()
                 ]
 
                 final_device_ids = [
                     device
                     for device in final_device_ids
-                    if device == device_Id
+                    if str(device).strip().upper() == str(device_Id).strip().upper()
                 ]
+
+                # Skip tests that do not match the requested device_Id
+                if not results:
+                    continue
 
             # =========================================
             # SAVE LOG ONLY FOR RETURNED RESULTS
