@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-3cb3)2*dr2wp2=yxl*@^b_(8&i$^3*+0&6-xqtj+dt4az4fu2c
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["shinova.in"]
 
 
 # Application definition
@@ -81,11 +81,11 @@ import certifi
 DATABASES = {
     'default': {
         'ENGINE': 'djongo',
-        'NAME': os.getenv("LAB_DB_NAME","Lab"),
+        'NAME': "Diagnostics",
         'ENFORCE_SCHEMA': False,
         'CLIENT': {
 
-            'host': os.getenv("GLOBAL_DB_HOST"),
+             'host': os.getenv("GLOBAL_DB_HOST"),
 
 
         }
