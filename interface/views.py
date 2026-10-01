@@ -5,7 +5,14 @@ from rest_framework.response import Response
 from rest_framework import status
 from .serializers import DeviceDataSerializer
 
+# Auth/permissions
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import AllowAny
+from pyauth.auth import HasRoleAndDataPermission
+
 @api_view(['POST'])
+# @permission_classes([HasRoleAndDataPermission])
 def create_device_data(request):
     try:
         serializer = DeviceDataSerializer(data=request.data)
@@ -45,8 +52,7 @@ import os
 # =========================================
 # MongoDB Connection
 # =========================================
-client = MongoClient(os.getenv("LAB_DB_HOST"))
-
+client = MongoClient(os.getenv("GLOBAL_DB_HOST"))
 db = client["Diagnostics"]
 
 # =========================================
@@ -62,6 +68,7 @@ sent_barcode_logs = db["sent_barcode_logs"]
 
 
 @api_view(["POST"])
+# @permission_classes([HasRoleAndDataPermission])
 def get_testcode_by_barcode(request):
 
     try:
