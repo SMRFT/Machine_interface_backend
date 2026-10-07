@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 # Create your models here.
 class Testvalue(models.Model):
@@ -28,13 +29,7 @@ class Testvalue(models.Model):
         return f"{self.DeviceID} - {self.TestCode}"
     
 
-
-
-
-
-
 class Bidirectional(models.Model):
-    
     DeviceID = models.CharField(max_length=20)
     lab_unique_id=models.CharField(max_length=25)
     Barcode = models.CharField(max_length=10)
