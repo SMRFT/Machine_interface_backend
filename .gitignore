@@ -7,6 +7,7 @@ __pycache__/
 # Environments
 .env
 .env.*
+!.env.example
 .env.local
 *.env
 .venv
@@ -55,3 +56,22 @@ MANIFEST
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# IDEs and Editors
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Certificates and Keys
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+id_rsa*
+
+# Temporary files
+*.tmp
+*.bak
+

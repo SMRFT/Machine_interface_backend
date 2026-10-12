@@ -59,6 +59,7 @@ db = client["Diagnostics"]
 # Collections
 # =========================================
 core_hmsbarcode = db["core_hmsbarcode"]
+core_barcodetestdetails = db["core_barcodetestdetails"]
 core_testdetails = db["core_testdetails"]
 
 # =========================================
@@ -93,11 +94,17 @@ def get_testcode_by_barcode(request):
             }, status=status.HTTP_400_BAD_REQUEST)
 
         # =========================================
-        # GET BARCODE DOCUMENT
+        # GET BARCODE DOCUMENT (HMS or B2B)
         # =========================================
         barcode_doc = core_hmsbarcode.find_one({
             "barcode": barcode
         })
+
+        # Check B2B collection if not found in core_hmsbarcode
+        if not barcode_doc:
+            barcode_doc = core_barcodetestdetails.find_one({
+                "barcode": barcode
+            })
 
         if not barcode_doc:
 
@@ -116,8 +123,11 @@ def get_testcode_by_barcode(request):
         # =========================================
         raw_testdetails = barcode_doc.get("testdetails", "[]")
 
-        # STRING → JSON
-        testdetails = json.loads(raw_testdetails)
+        # STRING / LIST → JSON
+        if isinstance(raw_testdetails, str):
+            testdetails = json.loads(raw_testdetails)
+        else:
+            testdetails = raw_testdetails or []
 
         response_data = []
 
