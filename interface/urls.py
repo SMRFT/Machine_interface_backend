@@ -6,4 +6,5 @@ urlpatterns = [
 
        path('device-data/', views.create_device_data, name='create-device-data'),#Devicedata(machineintreface)
        path('get-testcode-by-barcode/', views.get_testcode_by_barcode, name='get_testcode_by_barcode'),#Bidirectional
+       path('update-test-execution-status/', views.update_test_execution_status, name='update_test_execution_status'),
 ]
